@@ -1,0 +1,34 @@
+# macOS
+.DS_Store
+._*
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+
+# 环境变量与凭据（绝对不要提交）
+.env
+.env.*
+secrets/
+cookies*.txt
+*.session
+*.token
+
+# 原始抓取数据：体积大且可能含平台用户信息，不入库
+data/raw/*
+!data/raw/.gitkeep
+!data/raw/README.md
+
+# 成片、素材、导出（放网盘或对象存储）
+media/
+exports/
+assets/video/
+assets/audio/
+
+# 编辑器
+.vscode/
+.idea/
+*.swp
