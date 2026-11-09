@@ -54,7 +54,7 @@ def append_rows(path: str, rows: list[dict[str, Any]]) -> None:
     with open(path, "a", encoding="utf-8", newline="") as f:
         if need_newline:
             f.write("\n")
-        w = csv.DictWriter(f, fieldnames=cols, extrasaction="ignore")
+        w = csv.DictWriter(f, fieldnames=cols, extrasaction="ignore", lineterminator="\n")
         for r in rows:
             w.writerow({c: r.get(c, "") for c in cols})
 
@@ -117,7 +117,10 @@ def ask_float(prompt: str, default: float = 0.0) -> float:
 
 
 def ask_int(prompt: str, default: int = 0) -> int:
-    return int(ask_float(prompt, float(default)))
+    raw = input(f"{prompt} [{default}]: ").strip()
+    if not raw:
+        return default
+    return int(num(raw, float(default)))
 
 
 def fail(msg: str) -> None:
