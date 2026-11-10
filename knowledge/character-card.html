@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f1113">
+<title>麻薯 × 大吉 · 角色卡与 25 集脚本</title>
+<style>
+  :root{
+    --bg:#0f1113; --bg2:#16191c; --bg3:#1e2429; --bg4:#252c32;
+    --text:#f2f4f5; --muted:#9aa4ab; --dim:#6b757c;
+    --line:rgba(255,255,255,.09); --line2:rgba(255,255,255,.16);
+    --mochi:#f0ce86; --daji:#e8834a; --grn:#5dcaa5; --blu:#85b7eb; --pur:#afa9ec; --red:#e2645e;
+    --rad:14px; --mx:20px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--bg);color:var(--text);
+    font:15px/1.68 -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    letter-spacing:.01em;overflow-x:hidden;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(760px 420px at 12% -6%,rgba(240,206,134,.10),transparent 62%),
+      radial-gradient(700px 440px at 96% 4%,rgba(232,131,74,.09),transparent 60%);
+  }
+  main,header,footer{position:relative;z-index:1}
+  a{color:inherit;text-decoration:none}
+  p{margin:0}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px}
+
+  /* ---------- top bar ---------- */
+  .topbar{
+    position:sticky;top:0;z-index:60;
+    backdrop-filter:saturate(160%) blur(14px);-webkit-backdrop-filter:saturate(160%) blur(14px);
+    background:rgba(15,17,19,.82);border-bottom:1px solid var(--line);
+  }
+  .tb-in{display:flex;align-items:center;gap:10px;padding:9px var(--mx);max-width:860px;margin:0 auto}
+  .tb-title{font-size:13.5px;font-weight:600;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}
+  .tb-title b{color:var(--mochi);font-weight:700}
+  .tb-title i{font-style:normal;color:var(--dim);margin:0 5px}
+  .tb-title em{font-style:normal;color:var(--daji);font-weight:700}
+  .icon-btn{
+    flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;gap:6px;
+    height:32px;padding:0 11px;border-radius:9px;border:1px solid var(--line2);
+    background:var(--bg3);color:var(--text);font-size:12.5px;font-weight:500;cursor:pointer;
+    font-family:inherit;
+  }
+  .icon-btn:active{transform:scale(.97)}
+  .readbar{height:2px;background:transparent}
+  .readbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--mochi),var(--daji));border-radius:0 2px 2px 0}
+
+  /* ---------- menu ---------- */
+  .menu{
+    position:fixed;inset:0;z-index:90;display:none;
+  }
+  .menu.open{display:block}
+  .menu .mask{position:absolute;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(2px)}
+  .menu .panel{
+    position:absolute;top:0;right:0;bottom:0;width:min(82vw,320px);
+    background:var(--bg2);border-left:1px solid var(--line);
+    padding:18px 16px calc(24px + env(safe-area-inset-bottom));overflow-y:auto;
+    animation:slide .22s ease;
+  }
+  @keyframes slide{from{transform:translateX(24px);opacity:.6}to{transform:none;opacity:1}}
+  .menu h4{margin:0 0 12px;font-size:11.5px;letter-spacing:.14em;color:var(--dim);font-weight:600}
+  .menu a{display:flex;align-items:center;gap:10px;padding:11px 10px;border-radius:10px;font-size:14px;color:var(--muted)}
+  .menu a:active{background:var(--bg3)}
+  .menu a span{font-size:11px;color:var(--dim);font-variant-numeric:tabular-nums;width:16px}
+  .menu a.on{color:var(--text);background:var(--bg3)}
+  .menu a.on span{color:var(--mochi)}
+
+  /* ---------- layout ---------- */
+  section{max-width:860px;margin:0 auto;padding:38px var(--mx) 6px}
+  .hero{padding-top:30px}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:7px;font-size:11.5px;letter-spacing:.12em;
+    color:var(--mochi);border:1px solid rgba(240,206,134,.32);background:rgba(240,206,134,.07);
+    padding:5px 10px;border-radius:999px;font-weight:600;
+  }
+  h1{
+    margin:14px 0 0;font-size:clamp(28px,8.4vw,40px);line-height:1.2;letter-spacing:-.01em;font-weight:800;
+    background:linear-gradient(96deg,var(--mochi) 8%,#f7e6bd 40%,var(--daji) 92%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .lede{color:var(--muted);font-size:15px;margin-top:12px;max-width:34em}
+  .lede b{color:var(--text);font-weight:600}
+
+  h2{
+    margin:0 0 4px;font-size:20px;font-weight:700;letter-spacing:-.01em;
+    display:flex;align-items:baseline;gap:9px;
+  }
+  h2 .num{
+    font-size:11.5px;color:var(--dim);font-weight:600;letter-spacing:.1em;
+    font-variant-numeric:tabular-nums;
+  }
+  .sub{color:var(--muted);font-size:13.5px;margin-bottom:18px;line-height:1.6}
+
+  h3{margin:26px 0 10px;font-size:15px;font-weight:650;letter-spacing:.01em}
+  h3:first-child{margin-top:6px}
+
+  /* ---------- cards ---------- */
+  .card{
+    background:linear-gradient(180deg,var(--bg2),#14181b);
+    border:1px solid var(--line);border-radius:var(--rad);padding:16px 15px;
+  }
+  .card + .card{margin-top:12px}
+
+  /* stat strip */
+  .stats{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:22px;
+  }
+  .stat{
+    background:var(--bg2);border:1px solid var(--line);border-radius:12px;
+    padding:11px 8px;text-align:center;
+  }
+  .stat b{display:block;font-size:19px;font-weight:750;letter-spacing:-.02em;line-height:1.2}
+  .stat span{display:block;font-size:10.5px;color:var(--dim);margin-top:3px;letter-spacing:.02em}
+  .stat:nth-child(1) b{color:var(--mochi)}
+  .stat:nth-child(2) b{color:var(--daji)}
+  .stat:nth-child(3) b{color:var(--blu)}
+  .stat:nth-child(4) b{color:var(--grn)}
+
+  /* ---------- character ---------- */
+  .cast{display:grid;gap:14px;margin-top:6px}
+  .char{
+    position:relative;border-radius:16px;padding:17px 15px 14px;overflow:hidden;
+    border:1px solid var(--line);
+  }
+  .char.a{background:linear-gradient(170deg,rgba(240,206,134,.09),rgba(240,206,134,.01) 55%,var(--bg2))}
+  .char.b{background:linear-gradient(170deg,rgba(232,131,74,.10),rgba(232,131,74,.01) 55%,var(--bg2))}
+  .char::after{
+    content:"";position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px;
+  }
+  .char.a::after{background:var(--mochi)}
+  .char.b::after{background:var(--daji)}
+  .char-head{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+  .avatar{
+    width:40px;height:40px;border-radius:12px;display:grid;place-items:center;
+    font-size:20px;flex:0 0 auto;border:1px solid var(--line2);
+  }
+  .char.a .avatar{background:rgba(240,206,134,.14)}
+  .char.b .avatar{background:rgba(232,131,74,.14)}
+  .char-head h3{margin:0;font-size:18px;font-weight:750}
+  .tag{
+    font-size:10.5px;padding:2px 7px;border-radius:999px;font-weight:600;letter-spacing:.02em;
+    border:1px solid var(--line2);color:var(--muted);white-space:nowrap;
+  }
+  .char.a .tag{color:var(--mochi);border-color:rgba(240,206,134,.32);background:rgba(240,206,134,.08)}
+  .char.b .tag{color:var(--daji);border-color:rgba(232,131,74,.32);background:rgba(232,131,74,.08)}
+  .quote{font-size:13px;color:var(--muted);margin-top:2px}
+  .quote b{color:var(--text);font-weight:600}
+
+  .kv{margin-top:12px;border-top:1px solid var(--line);padding-top:4px}
+  .kv-row{display:grid;grid-template-columns:62px 1fr;gap:10px;padding:6px 0;font-size:13px;line-height:1.55}
+  .kv-row dt{color:var(--dim);font-size:12px;padding-top:1px}
+  .kv-row dd{margin:0;color:var(--text)}
+  .kv-row dd em{font-style:normal;color:var(--muted)}
+
+  .prompt{
+    margin-top:13px;border-radius:11px;border:1px dashed var(--line2);
+    background:rgba(0,0,0,.28);padding:11px 12px 10px;position:relative;
+  }
+  .prompt .ph{
+    display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:7px;
+  }
+  .prompt .ph span{font-size:10.5px;letter-spacing:.1em;color:var(--dim);font-weight:600}
+  .copy{
+    display:inline-flex;align-items:center;gap:5px;height:26px;padding:0 9px;border-radius:7px;
+    border:1px solid var(--line2);background:var(--bg3);color:var(--text);
+    font-size:11.5px;font-family:inherit;cursor:pointer;font-weight:500;
+  }
+  .copy:active{transform:scale(.96)}
+  .copy.ok{color:var(--grn);border-color:rgba(93,202,165,.45);background:rgba(93,202,165,.1)}
+  .prompt p{font-size:12.5px;line-height:1.72;color:#dfe5e8;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;word-break:break-word}
+
+  /* ---------- engine ---------- */
+  .verdict{
+    border-radius:16px;padding:16px 15px;border:1px solid rgba(240,206,134,.22);
+    background:linear-gradient(150deg,rgba(240,206,134,.1),rgba(232,131,74,.06) 70%,transparent);
+  }
+  .verdict .vlabel{font-size:10.5px;letter-spacing:.14em;color:var(--mochi);font-weight:700;margin-bottom:6px}
+  .verdict p{font-size:17px;font-weight:650;line-height:1.5}
+  .verdict p b{color:var(--mochi);font-weight:800}
+  .verdict p i{font-style:normal;color:var(--daji);font-weight:800}
+
+  .loop{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:13px}
+  .loop div{
+    text-align:center;font-size:11.5px;padding:9px 3px;border-radius:9px;
+    background:var(--bg3);border:1px solid var(--line);color:var(--muted);line-height:1.35;
+  }
+  .loop div:nth-child(4){color:var(--mochi);border-color:rgba(240,206,134,.28);background:rgba(240,206,134,.07)}
+
+  .formulas{display:grid;gap:7px;margin-top:12px}
+  .fml{
+    display:grid;grid-template-columns:22px 1fr;gap:9px;align-items:start;
+    padding:9px 11px;border-radius:10px;background:var(--bg3);border:1px solid var(--line);font-size:13px;
+  }
+  .fml i{font-style:normal;font-size:11px;color:var(--dim);font-variant-numeric:tabular-nums;padding-top:2px}
+  .fml b{font-weight:650}
+  .fml em{font-style:normal;color:var(--muted);display:block;font-size:12.5px;margin-top:1px;line-height:1.5}
+
+  /* ---------- world ---------- */
+  .scenes{display:grid;gap:8px;margin-top:12px}
+  .scene{
+    display:grid;grid-template-columns:74px 1fr;gap:11px;align-items:start;
+    padding:10px 12px;border-radius:11px;background:var(--bg2);border:1px solid var(--line);
+  }
+  .scene .sn{font-size:13px;font-weight:650;color:var(--blu);padding-top:1px}
+  .scene p{font-size:12.5px;color:var(--muted);line-height:1.55}
+  .scene p b{color:var(--text);font-weight:600}
+
+  .no{
+    margin-top:14px;border-radius:12px;padding:12px 13px;
+    background:rgba(226,100,94,.07);border:1px solid rgba(226,100,94,.22);
+  }
+  .no .nh{font-size:11px;letter-spacing:.12em;color:var(--red);font-weight:700;margin-bottom:7px}
+  .no ol{margin:0;padding-left:18px;font-size:13px;line-height:1.7;color:#ead9d8}
+  .no li::marker{color:var(--red)}
+
+  /* ---------- episodes ---------- */
+  .ep{
+    border:1px solid var(--line);border-radius:14px;background:var(--bg2);
+    margin-bottom:10px;overflow:hidden;
+  }
+  .ep.hot{border-color:rgba(226,100,94,.34);background:linear-gradient(180deg,rgba(226,100,94,.07),var(--bg2) 42%)}
+  .ep-head{
+    display:grid;grid-template-columns:46px 1fr auto;gap:11px;align-items:center;
+    padding:13px 13px;cursor:pointer;user-select:none;
+  }
+  .ep-no{
+    width:46px;height:46px;border-radius:12px;display:grid;place-items:center;
+    background:var(--bg4);border:1px solid var(--line2);flex:0 0 auto;
+  }
+  .ep-no b{font-size:17px;font-weight:750;line-height:1;display:block}
+  .ep-no span{font-size:8.5px;color:var(--dim);letter-spacing:.06em;display:block;margin-top:3px}
+  .ep.hot .ep-no{background:rgba(226,100,94,.14);border-color:rgba(226,100,94,.34)}
+  .ep-title{font-size:14.5px;font-weight:650;line-height:1.35}
+  .ep-meta{font-size:11.5px;color:var(--dim);margin-top:4px;display:flex;flex-wrap:wrap;gap:7px;align-items:center}
+  .pill{
+    font-size:10.5px;padding:1.5px 6px;border-radius:5px;font-weight:600;
+    background:var(--bg4);color:var(--muted);white-space:nowrap;
+  }
+  .pill.hook{color:var(--pur);background:rgba(175,169,236,.12)}
+  .pill.hotp{color:var(--red);background:rgba(226,100,94,.14)}
+  .chev{
+    width:24px;height:24px;display:grid;place-items:center;color:var(--dim);
+    transition:transform .22s ease;font-size:13px;
+  }
+  .ep.open .chev{transform:rotate(180deg)}
+  .ep-body{display:none;padding:0 13px 14px;border-top:1px solid var(--line)}
+  .ep.open .ep-body{display:block}
+  .intent{
+    font-size:12.5px;line-height:1.65;color:var(--muted);margin:11px 0 4px;
+    padding-left:9px;border-left:2px solid var(--line2);
+  }
+  .intent b{color:var(--text);font-weight:600}
+
+  .shots{margin-top:11px;display:grid;gap:1px;background:var(--line);border-radius:10px;overflow:hidden}
+  .shot{background:var(--bg2);padding:9px 11px;display:grid;grid-template-columns:1fr;gap:3px}
+  .shot .s1{display:flex;gap:7px;align-items:baseline;flex-wrap:wrap}
+  .shot .n{
+    font-size:10px;font-weight:700;color:var(--mochi);background:rgba(240,206,134,.1);
+    border-radius:4px;padding:0 4px;line-height:15px;min-width:16px;text-align:center;
+  }
+  .shot .t{font-size:10.5px;color:var(--dim);font-variant-numeric:tabular-nums;letter-spacing:.02em}
+  .shot .pic{font-size:12.5px;line-height:1.55;color:#dfe5e8}
+  .shot .dia{font-size:12.5px;line-height:1.55;color:var(--mochi);margin-top:1px}
+  .shot .dia.mute{color:var(--dim);font-style:italic}
+  .ep-foot{
+    margin-top:11px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;
+    font-size:12px;color:var(--dim);
+  }
+  .ep-foot .ad{color:var(--grn);font-size:12px}
+  .ep-foot .ad b{font-weight:600;color:#8fdec4}
+
+  /* ---------- checklist ---------- */
+  .chk-progress{
+    display:flex;align-items:center;gap:10px;margin-bottom:13px;
+  }
+  .chk-progress .bar{flex:1;height:6px;border-radius:99px;background:var(--bg4);overflow:hidden}
+  .chk-progress .bar i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--mochi),var(--grn));transition:width .3s ease}
+  .chk-progress .n{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .chk{display:grid;gap:2px}
+  .chk label{
+    display:grid;grid-template-columns:22px 1fr;gap:10px;align-items:start;
+    padding:11px 12px;border-radius:10px;cursor:pointer;font-size:13.5px;line-height:1.55;
+    border:1px solid transparent;
+  }
+  .chk label:active{background:var(--bg3)}
+  .chk input{position:absolute;opacity:0;width:0;height:0}
+  .chk .box{
+    width:20px;height:20px;border-radius:6px;border:1.5px solid var(--line2);
+    display:grid;place-items:center;margin-top:1px;flex:0 0 auto;transition:.15s;
+  }
+  .chk .box::after{content:"";width:9px;height:5px;border-left:2px solid #0f1113;border-bottom:2px solid #0f1113;
+    transform:rotate(-45deg) scale(0);transition:transform .15s;margin-top:-2px}
+  .chk input:checked + .box{background:var(--grn);border-color:var(--grn)}
+  .chk input:checked + .box::after{transform:rotate(-45deg) scale(1)}
+  .chk input:checked ~ .ct{color:var(--dim)}
+  .chk .ct b{color:var(--text);font-weight:650}
+  .chk input:checked ~ .ct b{color:var(--muted)}
+  .chk label:has(input:checked){background:rgba(93,202,165,.05)}
+
+  .btn-line{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+  .btn{
+    flex:1 1 auto;display:inline-flex;align-items:center;justify-content:center;gap:6px;
+    height:40px;padding:0 14px;border-radius:10px;border:1px solid var(--line2);
+    background:var(--bg3);color:var(--text);font-size:13px;font-weight:550;
+    font-family:inherit;cursor:pointer;
+  }
+  .btn:active{transform:scale(.985)}
+  .btn.pri{background:linear-gradient(96deg,rgba(240,206,134,.18),rgba(232,131,74,.18));border-color:rgba(240,206,134,.34)}
+
+  /* ---------- pool ---------- */
+  .chips{
+    display:flex;gap:7px;overflow-x:auto;padding:2px 0 12px;margin:0 calc(-1 * var(--mx));padding-left:var(--mx);padding-right:var(--mx);
+    -webkit-overflow-scrolling:touch;scrollbar-width:none;
+  }
+  .chips::-webkit-scrollbar{display:none}
+  .chip{
+    flex:0 0 auto;height:31px;padding:0 12px;border-radius:99px;border:1px solid var(--line2);
+    background:var(--bg2);color:var(--muted);font-size:12.5px;font-family:inherit;cursor:pointer;
+    display:inline-flex;align-items:center;gap:5px;white-space:nowrap;font-weight:500;
+  }
+  .chip .c{font-size:10.5px;color:var(--dim);font-variant-numeric:tabular-nums}
+  .chip.on{background:var(--text);color:#0f1113;border-color:var(--text);font-weight:650}
+  .chip.on .c{color:rgba(15,17,19,.55)}
+
+  .pool{display:grid;gap:7px}
+  .pl{
+    display:grid;grid-template-columns:30px 1fr 26px;gap:11px;align-items:center;
+    padding:11px 12px;border-radius:11px;background:var(--bg2);border:1px solid var(--line);
+  }
+  .pl .num{
+    align-self:start;padding-top:2px;
+    font-size:11.5px;color:var(--dim);font-variant-numeric:tabular-nums;
+    text-align:center;line-height:18px;
+  }
+  .pl .txt{min-width:0}
+  .pl .ttl{font-size:13.5px;font-weight:620;line-height:1.4}
+  .pl .one{font-size:12px;color:var(--muted);line-height:1.5;margin-top:2px}
+  .pl .f{font-size:10.5px;color:var(--pur);margin-top:4px;display:inline-block}
+  .pl .tick{
+    width:26px;height:26px;border-radius:8px;border:1px solid var(--line2);background:var(--bg3);
+    display:grid;place-items:center;cursor:pointer;color:transparent;font-size:12px;
+  }
+  .pl.done{border-color:rgba(93,202,165,.28);background:rgba(93,202,165,.05)}
+  .pl.done .ttl{color:var(--dim);text-decoration:line-through;text-decoration-color:rgba(107,117,124,.6)}
+  .pl.done .tick{background:var(--grn);border-color:var(--grn);color:#0f1113}
+  .pl.hide{display:none}
+  .pool-sum{font-size:12px;color:var(--dim);margin-top:12px;text-align:center}
+
+  /* ---------- flow ---------- */
+  .flow{position:relative;margin-top:6px;padding-left:0}
+  .step{display:grid;grid-template-columns:26px 1fr;gap:12px;padding-bottom:16px;position:relative}
+  .step:last-child{padding-bottom:0}
+  .step::before{
+    content:"";position:absolute;left:12px;top:26px;bottom:0;width:1.5px;
+    background:linear-gradient(180deg,var(--line2),transparent);
+  }
+  .step:last-child::before{display:none}
+  .step .dot{
+    width:25px;height:25px;border-radius:50%;background:var(--bg3);border:1px solid var(--line2);
+    display:grid;place-items:center;font-size:11.5px;font-weight:700;color:var(--mochi);z-index:1;
+  }
+  .step .sc{font-size:13.5px;font-weight:620;line-height:1.5}
+  .step .sd{font-size:12.5px;color:var(--muted);line-height:1.6;margin-top:3px}
+  .step .sd code{color:var(--daji);background:rgba(232,131,74,.1);padding:1px 4px;border-radius:4px;font-size:11.5px}
+
+  .warn{
+    margin-top:16px;border-radius:12px;padding:13px 14px;
+    background:rgba(240,206,134,.06);border:1px solid rgba(240,206,134,.24);
+    font-size:13px;line-height:1.68;color:#eadfc9;
+  }
+  .warn b{color:var(--mochi);font-weight:650}
+
+  footer{
+    max-width:860px;margin:0 auto;padding:30px var(--mx) calc(46px + env(safe-area-inset-bottom));
+    border-top:1px solid var(--line);margin-top:30px;
+  }
+  footer p{font-size:12px;color:var(--dim);line-height:1.7}
+  footer .sig{color:var(--muted);font-size:12.5px;margin-bottom:5px}
+
+  /* ---------- toast ---------- */
+  .toast{
+    position:fixed;left:50%;bottom:calc(26px + env(safe-area-inset-bottom));transform:translate(-50%,20px);
+    background:rgba(30,36,41,.96);border:1px solid var(--line2);color:var(--text);
+    padding:10px 16px;border-radius:99px;font-size:13px;z-index:120;opacity:0;pointer-events:none;
+    transition:opacity .2s,transform .2s;backdrop-filter:blur(10px);white-space:nowrap;
+  }
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+
+  /* ---------- reveal ---------- */
+  .js .reveal{opacity:0;transform:translateY(12px);transition:opacity .45s ease,transform .45s ease}
+  .js .reveal.in{opacity:1;transform:none}
+
+  /* ---------- small screens ---------- */
+  @media (max-width:400px){
+    :root{--mx:15px}
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .loop{grid-template-columns:repeat(2,1fr)}
+    .ep-head{grid-template-columns:42px 1fr auto;gap:9px}
+    .ep-no{width:42px;height:42px}
+    .scene{grid-template-columns:62px 1fr}
+  }
+  @media (min-width:700px){
+    .cast{grid-template-columns:1fr 1fr}
+    .ep-head{grid-template-columns:46px 1fr auto}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .js .reveal{opacity:1;transform:none;transition:none}
+    html{scroll-behavior:auto}
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="tb-in">
+    <div class="tb-title"><b>麻薯</b><i>×</i><em>大吉</em></div>
+    <button class="icon-btn" id="menuBtn" type="button" aria-label="目录">目录</button>
+  </div>
+  <div class="readbar"><i id="readbar"></i></div>
+</header>
+
+<div class="menu" id="menu">
+  <div class="mask" data-close></div>
+  <div class="panel">
+    <h4>目 录</h4>
+    <a href="#cast"><span>01</span>两个角色</a>
+    <a href="#engine"><span>02</span>关系引擎</a>
+    <a href="#world"><span>03</span>世界观与场景</a>
+    <a href="#episodes"><span>04</span>前 5 集脚本</a>
+    <a href="#check"><span>05</span>一致性清单</a>
+    <a href="#pool"><span>06</span>20 集选题池</a>
+    <a href="#flow"><span>07</span>生成工作流</a>
+  </div>
+</div>
+
+<main>
+
+  <!-- ============ HERO ============ -->
+  <section class="hero reveal" id="top">
+    <span class="eyebrow">角色卡 v1 · 2026-11</span>
+    <h1>麻薯 × 大吉</h1>
+    <p class="lede"><b>合租室友。麻薯以为自己在养这个家，其实一直在被大吉养。</b><br>一个拼命，一个躺平。这套设定能拍 25 集，商单从宠物用品接到租房平台。</p>
+
+    <div class="stats">
+      <div class="stat"><b>2</b><span>固定角色</span></div>
+      <div class="stat"><b>5</b><span>已写分镜</span></div>
+      <div class="stat"><b>25</b><span>集总规划</span></div>
+      <div class="stat"><b>¥30</b><span>单条成本上限</span></div>
+    </div>
+
+    <div class="card" style="margin-top:18px">
+      <p style="font-size:13px;line-height:1.7;color:var(--muted)">这一页是你开机时要看的东西：两条角色描述串（直接复制去生成）、关系引擎（保证每集都能出戏）、五集完整分镜、发片前的七项检查、还有剩下的 20 集选题。<b style="color:var(--text)">角色立不住，五集全是白干 —— 所以先做成卡片，别先做视频。</b></p>
+    </div>
+  </section>
+
+  <!-- ============ CAST ============ -->
+  <section id="cast" class="reveal">
+    <h2><span class="num">01</span>两个角色</h2>
+    <p class="sub">视觉必须强对比 —— 矮胖灰 vs 高瘦橘，站着 vs 躺着。这是辨识度的全部来源，也是观众三秒内能记住的东西。</p>
+
+    <div class="cast">
+
+      <article class="char a">
+        <div class="char-head">
+          <div class="avatar">🐹</div>
+          <div style="min-width:0">
+            <h3>麻薯</h3>
+            <p class="quote"><b>这个月一定能存下钱。</b>（每次都失败）</p>
+          </div>
+          <span class="tag" style="margin-left:auto">A · 主角</span>
+        </div>
+        <dl class="kv">
+          <div class="kv-row"><dt>物种</dt><dd>仓鼠 · 矮、圆、短腿</dd></div>
+          <div class="kv-row"><dt>视觉</dt><dd>奶黄色，肚子更浅，塌耳朵，圆框眼镜，永远穿一件起球的灰色针织背心</dd></div>
+          <div class="kv-row"><dt>体型</dt><dd>站着只到大吉的胸口</dd></div>
+          <div class="kv-row"><dt>性格</dt><dd>焦虑、要强、抠门、嘴硬心软</dd></div>
+          <div class="kv-row"><dt>身份</dt><dd>公司小职员，加班最狠的那个人</dd></div>
+          <div class="kv-row"><dt>标志</dt><dd>紧张时推眼镜；算账掏出计算器；说大话时手在背后偷偷攥紧</dd></div>
+          <div class="kv-row"><dt>音色</dt><dd>偏高、语速快、有点喘 —— <em>像总在赶时间的人</em></dd></div>
+        </dl>
+        <div class="prompt">
+          <div class="ph"><span>固定描述串 · 原样复制</span><button class="copy" type="button" data-copy="mochi">复制</button></div>
+          <p id="p-mochi">麻薯，一只矮胖圆润的奶黄色仓鼠，肚子浅色，塌耳朵，戴圆框眼镜，穿一件起球的灰色针织背心，短腿，眼睛小而有神，表情总是紧张，3D 皮克斯渲染质感，柔和顶光，浅灰纯色背景</p>
+        </div>
+      </article>
+
+      <article class="char b">
+        <div class="char-head">
+          <div class="avatar">🐈</div>
+          <div style="min-width:0">
+            <h3>大吉</h3>
+            <p class="quote"><b>急什么呢。</b></p>
+          </div>
+          <span class="tag" style="margin-left:auto">B · 搭档</span>
+        </div>
+        <dl class="kv">
+          <div class="kv-row"><dt>物种</dt><dd>橘猫 · 高、瘦、长腿</dd></div>
+          <div class="kv-row"><dt>视觉</dt><dd>橘色虎斑，白色下巴和四只爪子，头顶一撮永远翘起来的毛，穿人字拖</dd></div>
+          <div class="kv-row"><dt>体型</dt><dd>站着比麻薯高一个头</dd></div>
+          <div class="kv-row"><dt>性格</dt><dd>懒、松弛、运气好到离谱、话少但句句致命</dd></div>
+          <div class="kv-row"><dt>身份</dt><dd>不上班。靠遛狗、帮邻居搬东西、捡别人不要的东西过活</dd></div>
+          <div class="kv-row"><dt>标志</dt><dd>说那句话时慢慢眨眼；躺着用尾巴勾东西；永远在吃或准备吃</dd></div>
+          <div class="kv-row"><dt>音色</dt><dd>偏低、语速慢、尾音拖长 —— <em>像刚睡醒的人</em></dd></div>
+        </dl>
+        <div class="prompt">
+          <div class="ph"><span>固定描述串 · 原样复制</span><button class="copy" type="button" data-copy="daji">复制</button></div>
+          <p id="p-daji">大吉，一只高瘦的橘色虎斑猫，白色下巴和四只爪子，头顶一撮翘起的毛，穿人字拖，眼神慵懒半睁，身体修长，姿态总是躺着或靠着，3D 皮克斯渲染质感，柔和顶光，浅灰纯色背景</p>
+        </div>
+      </article>
+
+    </div>
+
+    <div class="warn"><b>两人音色必须反差极大，观众闭眼能分辨。定了就永不更换。</b>老赵那只会卖萌的奶猫之所以爆，靠的不是画面，是那句「别舔我了，你肘开呀」的声音。</div>
+
+    <div class="btn-line">
+      <button class="btn pri" type="button" data-copy="both">复制两条描述串</button>
+      <button class="btn" type="button" data-copy="scene">复制场景描述</button>
+    </div>
+  </section>
+
+  <!-- ============ ENGINE ============ -->
+  <section id="engine" class="reveal">
+    <h2><span class="num">02</span>关系引擎</h2>
+    <p class="sub">一句话定全剧。有了它，你不用再想题材，只需要把同一件事分别交给两个人处理。</p>
+
+    <div class="verdict">
+      <div class="vlabel">CORE CONFLICT</div>
+      <p>麻薯<b>越努力越倒霉</b>，大吉<i>越躺平越走运</i>。</p>
+    </div>
+
+    <div class="loop">
+      <div>麻薯努力</div>
+      <div>失败</div>
+      <div>发现大吉早就在托底</div>
+      <div>嘴硬不承认</div>
+    </div>
+
+    <p class="sub" style="margin-top:14px;margin-bottom:0">这个结构能重复几十次不腻，因为观众每次都在等那个「发现」的瞬间。他们关注的是<b style="color:var(--text)">「下一次它又会怎么默默帮他」</b>，不是「这只猫好可爱」。</p>
+
+    <h3>六条可复用剧情公式（每集套一个）</h3>
+    <div class="formulas">
+      <div class="fml"><i>01</i><span><b>努力翻车</b><em>麻薯拼命做一件事，结果一团糟，大吉随手搞定</em></span></div>
+      <div class="fml"><i>02</i><span><b>嘴硬打脸</b><em>麻薯立 flag → 立刻破功 → 大吉假装没看见</em></span></div>
+      <div class="fml"><i>03</i><span><b>争抢推让</b><em>两人抢一样东西 → 越推越假 → 最后东西没了</em></span></div>
+      <div class="fml"><i>04</i><span><b>隐瞒发现</b><em>大吉偷偷做了什么 → 麻薯误会 → 结尾揭穿</em></span></div>
+      <div class="fml"><i>05</i><span><b>外部压力</b><em>房租 / 老板 / 亲戚 / 体检 → 两人被迫合作</em></span></div>
+      <div class="fml"><i>06</i><span><b>生病示弱</b><em>一方出状况，另一方露出真面目</em></span></div>
+    </div>
+  </section>
+
+  <!-- ============ WORLD ============ -->
+  <section id="world" class="reveal">
+    <h2><span class="num">03</span>世界观与固定场景</h2>
+    <p class="sub">两个动物住在一间城市老破小里，周围全是人类，但没有一张人类正脸。这条设定同时解决三件事：避肖像权、降生成难度、强化动物世界的代入感。</p>
+
+    <div class="scenes">
+      <div class="scene"><div class="sn">客厅</div><p>一张塌了一边的旧沙发、一台小风扇、冰箱门上贴满水电费单、旧木地板<br><b>60% 的戏在这里 · 每集必出现</b></p></div>
+      <div class="scene"><div class="sn">便利店</div><p>深夜白光、货架、玻璃门反光<br><b>夜戏、买醉、加班回家</b></p></div>
+      <div class="scene"><div class="sn">地铁</div><p>早高峰、扶手、人群的腿（只拍腿和包）<br><b>通勤、挤、累</b></p></div>
+      <div class="scene"><div class="sn">小公园</div><p>一张长椅、一棵树、路灯<br><b>谈心、结尾留白</b></p></div>
+    </div>
+
+    <div class="no">
+      <div class="nh">拍摄禁忌 · 违反就废</div>
+      <ol>
+        <li><b>不出现人类正脸</b>，只出现手、腿、背影</li>
+        <li><b>机位永远压低</b>（离地 20–30cm 的动物视角）—— 这条决定「这是动物的世界」</li>
+        <li><b>每集必须有一个固定场景</b>（客厅），让观众有归属感</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============ EPISODES ============ -->
+  <section id="episodes" class="reveal">
+    <h2><span class="num">04</span>前 5 集脚本</h2>
+    <p class="sub">竖屏 9:16 · 60–90 秒 · 8–10 个镜头 · 无人类正脸 · 全程字幕。点标题展开逐镜分镜。</p>
+
+    <div class="ep-list" id="epList"></div>
+
+    <div class="btn-line">
+      <button class="btn" type="button" data-copy="eps">复制 5 集大纲</button>
+      <button class="btn" type="button" id="expandAll">全部展开</button>
+    </div>
+  </section>
+
+  <!-- ============ CHECKLIST ============ -->
+  <section id="check" class="reveal">
+    <h2><span class="num">05</span>一致性清单</h2>
+    <p class="sub">每集发之前过一遍。勾选会存在你自己的手机里，下次打开还在。</p>
+
+    <div class="card">
+      <div class="chk-progress">
+        <div class="bar"><i id="chkBar"></i></div>
+        <div class="n" id="chkNum">0 / 7</div>
+      </div>
+      <div class="chk" id="chkList"></div>
+      <div class="btn-line">
+        <button class="btn" type="button" id="resetChk">重置清单</button>
+      </div>
+    </div>
+
+    <div class="warn"><b>任何一项不过，重做。</b>观众不会因为画质差取关，但会因为「第 5 集的主角不像第 1 集」取关。</div>
+  </section>
+
+  <!-- ============ POOL ============ -->
+  <section id="pool" class="reveal">
+    <h2><span class="num">06</span>20 集选题池</h2>
+    <p class="sub">每条都标了套哪条公式。按公式筛选看分布 —— 外部压力最多，因为最容易请到「新角色」而不破坏世界。</p>
+
+    <div class="chips" id="chips"></div>
+    <div class="pool" id="poolList"></div>
+    <div class="pool-sum" id="poolSum"></div>
+
+    <div class="warn" style="margin-top:14px"><b>做满 25 集，这个 IP 才有资格谈盲盒和授权。</b>但别一次拍完 —— 每发 3 集看一次数据，哪条钩子的涨粉率过 1%，就把剩下 15 集按那个钩子重排。</div>
+  </section>
+
+  <!-- ============ FLOW ============ -->
+  <section id="flow" class="reveal">
+    <h2><span class="num">07</span>生成工作流</h2>
+    <p class="sub">一次 4 小时，出 3 集。关键不是「抽卡次数」，是「先出参考图再批量出镜头」。</p>
+
+    <div class="flow">
+      <div class="step">
+        <div class="dot">1</div>
+        <div>
+          <div class="sc">出三视图</div>
+          <div class="sd">复制两个角色的固定描述串 → 正 / 侧 / 背三张，存成参考图。这一步决定后面 40 个镜头像不像同一个人。</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="dot">2</div>
+        <div>
+          <div class="sc">批量出镜头</div>
+          <div class="sd">用参考图 + 场景描述，一次出 <code>40 个镜头构图</code>（不是 40 张图，是 40 个「这一幕怎么拍」）。</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="dot">3</div>
+        <div>
+          <div class="sc">图生视频</div>
+          <div class="sd">每个镜头抽 <code>3–5 次</code>，只留能用的。抽不出就换构图，别死磕同一个素材。</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="dot">4</div>
+        <div>
+          <div class="sc">配音分开录</div>
+          <div class="sd">先录麻薯（快），再录大吉（慢）。<code>一定分开录</code>，一次录完两把嗓子必然混。</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="dot">5</div>
+        <div>
+          <div class="sc">剪辑统一格式</div>
+          <div class="sd">字幕字号统一、片头固定 3 秒、片尾固定 2 秒。这三样固定了，账号才有「像同一个频道」的质感。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="warn"><b>单条成本上限 ¥30。</b>超了就减镜头数，不要加抽卡次数 —— 用钱补创意是这条线上最常见的亏损方式。</div>
+  </section>
+
+</main>
+
+<footer>
+  <p class="sig">麻薯 × 大吉 · 角色卡与 25 集规划</p>
+  <p>内容对应仓库 <code>docs/13-角色设定与前5集脚本.md</code> 与 <code>data/episodes.csv</code>。分镜、台词、一致性规则改动时请同步两处，否则台账会漂。</p>
+  <p style="margin-top:8px">发布必做：勾选 AI 生成标识（不勾才限流）、不出现人类正脸、不站外导流。</p>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  "use strict";
+  var $ = function(s,r){ return (r||document).querySelector(s); };
+  var $$ = function(s,r){ return Array.prototype.slice.call((r||document).querySelectorAll(s)); };
+
+  /* ---------------- data ---------------- */
+  var CHARACTERS = {
+    mochi: "麻薯，一只矮胖圆润的奶黄色仓鼠，肚子浅色，塌耳朵，戴圆框眼镜，穿一件起球的灰色针织背心，短腿，眼睛小而有神，表情总是紧张，3D 皮克斯渲染质感，柔和顶光，浅灰纯色背景",
+    daji: "大吉，一只高瘦的橘色虎斑猫，白色下巴和四只爪子，头顶一撮翘起的毛，穿人字拖，眼神慵懒半睁，身体修长，姿态总是躺着或靠着，3D 皮克斯渲染质感，柔和顶光，浅灰纯色背景",
+    scene: "城市老破小出租屋客厅：一张塌了一边的旧沙发、一台小风扇、冰箱门上贴满水电费单、旧木地板，低机位动物视角（离地 20-30cm），不出现人类正脸，3D 皮克斯渲染质感，柔和顶光"
+  };
+
+  var EPS = [
+    {
+      n: 1, title: "数钱", hook: "悬念式", sec: 75, hot: false,
+      intent: "用「反常画面」当钩子，第一集必须让观众 3 秒内产生「这是什么」的疑问。同时用一句话把两人的关系和经济落差交代完 —— 后面所有剧情都建立在这个落差上。",
+      ad: "无（前 3 集不接商单，先立角色）",
+      shots: [
+        ["0–3","特写：一沓零钱在桌上被数，数钱的是橘色的猫爪","（只有数钱声，无台词）",1],
+        ["3–8","全景：凌晨的出租屋，门开，麻薯进来，领带歪了，黑眼圈","无",1],
+        ["8–15","麻薯看着桌上的钱，僵住","麻薯：你……哪来的钱？",0],
+        ["15–25","大吉躺着数钱，头都不抬","大吉：遛狗。",0],
+        ["25–40","麻薯掏出工资条，手抖","麻薯：遛狗？我加班到凌晨三点！",0],
+        ["40–55","大吉终于抬头，慢慢眨眼","大吉：你算一下时薪。",0],
+        ["55–65","麻薯掏计算器，越算脸越白，眼镜滑下来","字幕：麻薯时薪 ¥4.2　大吉时薪 ¥38",1],
+        ["65–72","麻薯解下领带，扔进垃圾桶","无",1],
+        ["72–75","大吉抬头，尾巴一动","大吉：明天，跟我去遛狗？／黑屏：第 2 集 · 麻薯的第一天遛狗",0]
+      ]
+    },
+    {
+      n: 2, title: "戒炸鸡", hook: "反差式", sec: 70, hot: false,
+      intent: "反差式是传播最强的一种 —— 先卖萌 3 秒，第 4 秒给冲突。这一集是第一次展示「大吉的默默托底」，把喜剧转温情，是涨粉的关键一集。",
+      ad: "炸鸡 / 零食 / 外卖平台（第 5 镜冰箱里的包装是天然植入位）",
+      shots: [
+        ["0–3","麻薯站在体重秤上，数字疯狂跳动最后显示 ERROR","无",1],
+        ["3–10","麻薯叉腰立 flag，背景大吉正在啃炸鸡","麻薯：从今天起，戒炸鸡。",0],
+        ["10–20","大吉把炸鸡递过去，麻薯一巴掌推开","大吉：急什么呢。",0],
+        ["20–35","深夜。麻薯在床上睁眼，肚子叫。摸黑走到冰箱","字幕：凌晨 2:47",1],
+        ["35–45","打开冰箱 —— 一份炸鸡，贴着便签","便签特写：给你的。别装。",1],
+        ["45–55","麻薯愣住，回头。沙发上「睡着」的大吉，尾巴动了一下","无",1],
+        ["55–65","麻薯坐下吃，吃得极快，一边吃一边掉眼泪（喜剧化的哭）","无",1],
+        ["65–70","字幕卡","第二天体重：+0.3kg／大吉画外音：你看，我就说急什么呢。／黑屏：第 3 集 · 最后一个肉包",0]
+      ]
+    },
+    {
+      n: 3, title: "最后一个肉包", hook: "日常式", sec: 65, hot: false,
+      intent: "日常式完播最稳，用来「稳住」观众。这一集测的是「两人互相推让」的喜剧节奏 —— 纯笑点，不带情绪，用来调节前两集的浓度。",
+      ad: "便利店 / 包子 / 速冻食品",
+      shots: [
+        ["0–3","桌上一个肉包，两只手同时伸过去，撞在一起","无",1],
+        ["3–10","两人对视，谁也不松手，僵持","无",1],
+        ["10–20","特写两只手在包子上较劲","麻薯：你昨天吃了。／大吉：你前天吃了。",0],
+        ["20–35","推让拉锯战，越推越客气，越客气越假","麻薯：你吃你吃。／大吉：不不不，你吃。",0],
+        ["35–42","麻薯想出办法","麻薯：要不……一人一半？",0],
+        ["42–50","拿刀，切下去的瞬间，窗外一只流浪猫跳进来，叼走整个包子","（一声猫叫 + 风声）",1],
+        ["50–60","两人追出门，镜头留在空桌上","字幕：追了三条街",1],
+        ["60–65","两人气喘吁吁回来，各拎一袋包子","大吉：你看，急什么呢。／麻薯无语／黑屏：第 4 集 · 大吉不动了",0]
+      ]
+    },
+    {
+      n: 4, title: "大吉不动了", hook: "情绪式", sec: 85, hot: true,
+      intent: "这集是整个系列最可能爆的一集。情绪式涨粉最稳，而「以为对方要死了，结果是心疼你加班」是极强的情绪反转。这集之后，观众会开始真正喜欢这两个角色，不只是觉得好笑。",
+      ad: "电饭煲 / 厨房小家电 / 米（第 5 镜厨房是天然场景）",
+      shots: [
+        ["0–3","大吉躺在沙发上一动不动。麻薯叫它，没反应","麻薯：大吉？",0],
+        ["3–12","麻薯摸它的头，手在抖。镜头怼近大吉闭着的眼","无",1],
+        ["12–25","麻薯掏手机，给老板打字「今天请假」，删掉，又写，又删","字幕：（打了 4 遍）",1],
+        ["25–35","手指按下发送。屏幕「已发送」","无",1],
+        ["35–50","麻薯煮粥，完全不会，厨房一团糟（米撒了一地）","无",1],
+        ["50–62","回头看沙发 —— 大吉睁着眼看它","大吉：你在干嘛？／麻薯：你不是病了吗！",0],
+        ["62–72","大吉慢慢坐起来","大吉：我没病。／大吉：我就是想让你今天别去上班。",0],
+        ["72–82","麻薯愣住，然后蹲下来，把脸埋进沙发。镜头不动","无（只有风扇声）",1],
+        ["82–85","大吉拍拍它的头","大吉：粥糊了。／黑屏：第 5 集 · 房租日",0]
+      ]
+    },
+    {
+      n: 5, title: "房租日", hook: "悬念式", sec: 80, hot: false,
+      intent: "用一个外部压力把两人绑在一起，结尾给「铁罐」这个大钩子 —— 这是第一季的情绪最高点，也是让观众从「看」变成「追」的一集。",
+      ad: "存钱罐 / 收纳 / 租房平台",
+      shots: [
+        ["0–3","门被敲响。三下，很重。两人同时抬头","字幕：房租日",1],
+        ["3–10","桌上摊着一堆零钱，两人数了一遍，不够","无",1],
+        ["10–20","麻薯翻遍所有口袋，只掏出三个硬币","麻薯：这个月……",0],
+        ["20–32","敲门声变急。麻薯开始发抖","无（敲门声加重）",1],
+        ["32–42","大吉慢慢站起来，走向角落的柜子","无",1],
+        ["42–52","打开柜子，拿出一个旧铁罐（饼干罐），罐身有锈","无",1],
+        ["52–65","倒出来 —— 满满一罐硬币和零钱，铺满桌面，正好够","麻薯：你哪来的？／大吉：遛狗的时候，别人不要的。",0],
+        ["65–76","麻薯拿起空罐子，罐身贴着一张褪色的小纸条","纸条特写：给麻薯的",1],
+        ["76–80","麻薯抬头看大吉，大吉已经走去开门。门的影子投进来","黑屏：第 6 集 · 待定",0]
+      ]
+    }
+  ];
+
+  var POOL = [
+    [6, "房东", "外部压力", "房东是个老太太，进门第一句：你们俩谁交的房租？"],
+    [7, "体检", "外部压力", "麻薯体检报告出来，不敢看，大吉替它看"],
+    [8, "加班到天亮", "努力翻车", "麻薯在公司通宵，大吉出现在楼下，拎着早饭"],
+    [9, "相亲", "外部压力", "麻薯被安排相亲，大吉假扮它哥去搅局"],
+    [10, "停电", "争抢推让", "停电，最后一根蜡烛，两人推让到天亮"],
+    [11, "快递", "隐瞒发现", "麻薯收到一个没下单的快递，里面是给它的东西"],
+    [12, "减肥第二季", "嘴硬打脸", "麻薯办了健身卡，去了 3 次"],
+    [13, "大吉找工作", "努力翻车", "大吉真的去面试，把面试官问住了"],
+    [14, "台风天", "外部压力", "台风夜，窗户漏水，两人用一个盆接"],
+    [15, "存钱罐空了", "隐瞒发现", "铁罐空了，麻薯以为大吉乱花，其实……"],
+    [16, "生日", "隐瞒发现", "麻薯忘了自己生日，大吉记得"],
+    [17, "同事来访", "争抢推让", "同事来家里，两人抢着装体面"],
+    [18, "大吉恋爱了", "情绪", "大吉开始每天出门，麻薯慌了"],
+    [19, "搬家", "外部压力", "房租涨了，两人去看更小的房子"],
+    [20, "过年", "情绪", "都不回家，两个人一起过年"],
+    [21, "麻薯升职", "嘴硬打脸", "升职要调到外地，麻薯不知道怎么开口"],
+    [22, "大吉不见了", "情绪", "大吉一天没回家"],
+    [23, "猫薄荷", "反差", "大吉第一次失态"],
+    [24, "水逆", "努力翻车", "麻薯做什么都不顺，大吉做什么都顺"],
+    [25, "一年后", "情绪", "回头看这一年（第一季收尾）"]
+  ];
+
+  var CHECKS = [
+    ["麻薯", "眼镜、灰色起球背心、塌耳朵、矮胖 —— 三样缺一不可"],
+    ["大吉", "头顶翘毛、人字拖、白色下巴和四爪、高瘦 —— 四样缺一不可"],
+    ["客厅", "塌沙发、小风扇、贴满单子的冰箱 —— 三样至少一样入画"],
+    ["机位", "全程低机位，没有一张人类正脸"],
+    ["声音", "麻薯快而高、大吉慢而低，这集有没有混"],
+    ["结尾", "有没有留追更钩子 + 下一集标题"],
+    ["标识", "发布时勾选 AI 生成标识"]
+  ];
+
+  /* ---------------- helpers ---------------- */
+  function esc(s){
+    return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  }
+  function store(key, val){
+    try{
+      if(val === undefined) return JSON.parse(localStorage.getItem(key) || "null");
+      localStorage.setItem(key, JSON.stringify(val));
+    }catch(e){ return null; }
+  }
+  var toastTimer = null;
+  function toast(msg){
+    var t = $("#toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ t.classList.remove("show"); }, 1700);
+  }
+  function copyText(text, label){
+    var done = function(){ toast(label || "已复制"); };
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(done, function(){ fallbackCopy(text, done); });
+    }else{
+      fallbackCopy(text, done);
+    }
+  }
+  function fallbackCopy(text, done){
+    var ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.cssText = "position:fixed;top:-9999px;opacity:0";
+    document.body.appendChild(ta);
+    ta.select();
+    try{ document.execCommand("copy"); done(); }
+    catch(e){ toast("复制失败，请长按选中"); }
+    document.body.removeChild(ta);
+  }
+
+  /* ---------------- episodes ---------------- */
+  function renderEpisodes(){
+    var host = $("#epList");
+    var html = "";
+    EPS.forEach(function(ep, i){
+      var shots = ep.shots.map(function(s, si){
+        return '<div class="shot">' +
+            '<div class="s1"><span class="n">' + (si + 1) + '</span><span class="t">' + esc(s[0]) + '</span></div>' +
+            '<div class="pic">' + esc(s[1]) + '</div>' +
+            '<div class="dia' + (s[2] === "无" ? " mute" : "") + '">' + esc(s[2]) + '</div>' +
+          '</div>';
+      }).join("");
+      html +=
+        '<article class="ep' + (ep.hot ? " hot" : "") + '" data-i="' + i + '">' +
+          '<div class="ep-head" role="button" tabindex="0">' +
+            '<div class="ep-no"><b>' + ep.n + '</b><span>EP</span></div>' +
+            '<div>' +
+              '<div class="ep-title">《' + esc(ep.title) + '》' +
+                (ep.hot ? ' <span class="pill hotp">最可能爆</span>' : '') +
+              '</div>' +
+              '<div class="ep-meta">' +
+                '<span class="pill hook">' + ep.hook + '</span>' +
+                '<span>' + ep.sec + ' 秒</span>' +
+                '<span>' + ep.shots.length + ' 个镜头</span>' +
+              '</div>' +
+            '</div>' +
+            '<div class="chev">▾</div>' +
+          '</div>' +
+          '<div class="ep-body">' +
+            '<p class="intent">' + esc(ep.intent) + '</p>' +
+            '<div class="shots">' + shots + '</div>' +
+            '<div class="ep-foot"><span class="ad">可植入：<b>' + esc(ep.ad) + '</b></span></div>' +
+            '<div class="btn-line" style="margin-top:10px">' +
+              '<button class="btn" type="button" data-copy-ep="' + i + '">复制这集脚本</button>' +
+            '</div>' +
+          '</div>' +
+        '</article>';
+    });
+    host.innerHTML = html;
+
+    $$(".ep-head", host).forEach(function(h){
+      var toggle = function(){
+        var ep = h.parentNode;
+        ep.classList.toggle("open");
+      };
+      h.addEventListener("click", toggle);
+      h.addEventListener("keydown", function(e){
+        if(e.key === "Enter" || e.key === " "){ e.preventDefault(); toggle(); }
+      });
+    });
+  }
+
+  function epToText(ep){
+    var lines = ["第 " + ep.n + " 集《" + ep.title + "》 · " + ep.hook + " · " + ep.sec + " 秒", ""];
+    ep.shots.forEach(function(s, si){
+      lines.push((si + 1) + ". [" + s[0] + "] " + s[1]);
+      if(s[2] && s[2] !== "无") lines.push("    " + s[2]);
+    });
+    lines.push("", "可植入：" + ep.ad);
+    return lines.join("\n");
+  }
+
+  /* ---------------- checklist ---------------- */
+  function renderChecks(){
+    var host = $("#chkList");
+    var saved = store("md_chk_v1") || [];
+    host.innerHTML = CHECKS.map(function(c, i){
+      var on = saved.indexOf(i) > -1 ? " checked" : "";
+      return '<label><input type="checkbox" data-ci="' + i + '"' + on + '>' +
+             '<span class="box"></span>' +
+             '<span class="ct"><b>' + esc(c[0]) + '</b> · ' + esc(c[1]) + '</span></label>';
+    }).join("");
+    $$("input", host).forEach(function(inp){
+      inp.addEventListener("change", function(){
+        var list = store("md_chk_v1") || [];
+        var i = parseInt(inp.getAttribute("data-ci"), 10);
+        if(inp.checked){ if(list.indexOf(i) < 0) list.push(i); }
+        else{ list = list.filter(function(x){ return x !== i; }); }
+        store("md_chk_v1", list);
+        updateChk();
+      });
+    });
+    updateChk();
+  }
+  function updateChk(){
+    var n = $$("#chkList input:checked").length;
+    var total = CHECKS.length;
+    $("#chkNum").textContent = n + " / " + total;
+    $("#chkBar").style.width = (n / total * 100) + "%";
+  }
+
+  /* ---------------- pool ---------------- */
+  var curFilter = "全部";
+  function renderChips(){
+    var counts = {};
+    POOL.forEach(function(p){ counts[p[2]] = (counts[p[2]] || 0) + 1; });
+    var cats = ["全部"];
+    Object.keys(counts).forEach(function(k){ if(k !== "全部") cats.push(k); });
+    cats.sort(function(a,b){
+      if(a === "全部") return -1;
+      if(b === "全部") return 1;
+      return counts[b] - counts[a];
+    });
+    $("#chips").innerHTML = cats.map(function(c){
+      var num = c === "全部" ? POOL.length : counts[c];
+      return '<button class="chip' + (c === curFilter ? " on" : "") + '" type="button" data-f="' + esc(c) + '">' +
+        esc(c) + '<span class="c">' + num + '</span></button>';
+    }).join("");
+    $$("#chips .chip").forEach(function(b){
+      b.addEventListener("click", function(){
+        curFilter = b.getAttribute("data-f");
+        renderChips();
+        applyFilter();
+      });
+    });
+  }
+  function renderPool(){
+    var done = store("md_pool_v1") || [];
+    $("#poolList").innerHTML = POOL.map(function(p){
+      var isDone = done.indexOf(p[0]) > -1;
+      return '<div class="pl' + (isDone ? " done" : "") + '" data-cat="' + esc(p[2]) + '" data-n="' + p[0] + '">' +
+          '<div class="num">' + p[0] + '</div>' +
+          '<div class="txt"><div class="ttl">' + esc(p[1]) + '</div>' +
+            '<div class="one">' + esc(p[3]) + '</div>' +
+            '<span class="f">' + esc(p[2]) + '</span></div>' +
+          '<div class="tick" role="button" tabindex="0">✓</div>' +
+        '</div>';
+    }).join("");
+    $$("#poolList .tick").forEach(function(t){
+      var act = function(){
+        var row = t.parentNode;
+        var n = parseInt(row.getAttribute("data-n"), 10);
+        var list = store("md_pool_v1") || [];
+        var i = list.indexOf(n);
+        if(i > -1){ list.splice(i,1); row.classList.remove("done"); }
+        else{ list.push(n); row.classList.add("done"); }
+        store("md_pool_v1", list);
+        updatePoolSum();
+      };
+      t.addEventListener("click", act);
+      t.addEventListener("keydown", function(e){
+        if(e.key === "Enter" || e.key === " "){ e.preventDefault(); act(); }
+      });
+    });
+    applyFilter();
+  }
+  function applyFilter(){
+    var shown = 0;
+    $$("#poolList .pl").forEach(function(r){
+      var ok = curFilter === "全部" || r.getAttribute("data-cat") === curFilter;
+      r.classList.toggle("hide", !ok);
+      if(ok) shown++;
+    });
+    updatePoolSum(shown);
+  }
+  function updatePoolSum(shown){
+    var done = store("md_pool_v1") || [];
+    var n = done.length;
+    var base = "已完成 " + n + " / " + POOL.length + " 集";
+    if(shown !== undefined && curFilter !== "全部") base += " · 当前筛选 " + shown + " 集";
+    $("#poolSum").textContent = base;
+  }
+
+  /* ---------------- copy buttons ---------------- */
+  function bindCopy(){
+    var map = {
+      mochi: CHARACTERS.mochi,
+      daji: CHARACTERS.daji,
+      both: CHARACTERS.mochi + "\n\n" + CHARACTERS.daji,
+      scene: CHARACTERS.scene,
+      eps: EPS.map(function(e){ return "第 " + e.n + " 集《" + e.title + "》· " + e.hook + " · " + e.sec + "s —— " + e.intent; }).join("\n\n")
+    };
+    $$("[data-copy]").forEach(function(btn){
+      btn.addEventListener("click", function(){
+        var key = btn.getAttribute("data-copy");
+        copyText(map[key] || "", key === "both" ? "两条描述串已复制" : "已复制，可直接粘贴");
+        btn.classList.add("ok");
+        var old = btn.textContent;
+        btn.textContent = "已复制";
+        setTimeout(function(){ btn.classList.remove("ok"); btn.textContent = old; }, 1400);
+      });
+    });
+    $$("[data-copy-ep]").forEach(function(btn){
+      btn.addEventListener("click", function(e){
+        e.stopPropagation();
+        var i = parseInt(btn.getAttribute("data-copy-ep"), 10);
+        copyText(epToText(EPS[i]), "第 " + EPS[i].n + " 集脚本已复制");
+        btn.textContent = "已复制";
+        setTimeout(function(){ btn.textContent = "复制这集脚本"; }, 1400);
+      });
+    });
+  }
+
+  /* ---------------- nav / progress ---------------- */
+  function bindNav(){
+    var menu = $("#menu");
+    $("#menuBtn").addEventListener("click", function(){ menu.classList.add("open"); });
+    $$("[data-close], #menu a").forEach(function(el){
+      el.addEventListener("click", function(){ menu.classList.remove("open"); });
+    });
+    document.addEventListener("keydown", function(e){
+      if(e.key === "Escape") menu.classList.remove("open");
+    });
+
+    var ids = ["cast","engine","world","episodes","check","pool","flow"];
+    var links = $$("#menu a");
+    function onScroll(){
+      var doc = document.documentElement;
+      var max = doc.scrollHeight - window.innerHeight;
+      var p = max > 0 ? Math.min(1, window.scrollY / max) : 0;
+      $("#readbar").style.width = (p * 100) + "%";
+      var cur = -1;
+      ids.forEach(function(id, i){
+        var el = document.getElementById(id);
+        if(el && el.getBoundingClientRect().top <= 120) cur = i;
+      });
+      links.forEach(function(a, i){ a.classList.toggle("on", i === cur); });
+    }
+    var ticking = false;
+    window.addEventListener("scroll", function(){
+      if(ticking) return;
+      ticking = true;
+      requestAnimationFrame(function(){ onScroll(); ticking = false; });
+    }, { passive: true });
+    onScroll();
+  }
+
+  /* ---------------- reveal ---------------- */
+  function revealAll(){
+    $$(".reveal").forEach(function(el){ el.classList.add("in"); });
+  }
+  function initReveal(){
+    if(!("IntersectionObserver" in window)){ revealAll(); return; }
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){ en.target.classList.add("in"); io.unobserve(en.target); }
+      });
+    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.04 });
+    $$(".reveal").forEach(function(el){ io.observe(el); });
+    setTimeout(revealAll, 2200);
+  }
+
+  /* ---------------- init ---------------- */
+  renderEpisodes();
+  renderChecks();
+  renderChips();
+  renderPool();
+  bindCopy();
+  bindNav();
+  initReveal();
+
+  // open first episode by default on wide screens
+  (function(){
+    var first = $("#epList .ep");
+    if(first && window.innerWidth >= 700) first.classList.add("open");
+  })();
+
+  var expandBtn = $("#expandAll");
+  if(expandBtn){
+    expandBtn.addEventListener("click", function(){
+      var eps = $$("#epList .ep");
+      var anyClosed = eps.some(function(e){ return !e.classList.contains("open"); });
+      eps.forEach(function(e){ e.classList.toggle("open", anyClosed); });
+      expandBtn.textContent = anyClosed ? "全部收起" : "全部展开";
+    });
+  }
+
+  var resetBtn = $("#resetChk");
+  if(resetBtn){
+    resetBtn.addEventListener("click", function(){
+      store("md_chk_v1", []);
+      $$("#chkList input").forEach(function(i){ i.checked = false; });
+      updateChk();
+      toast("清单已重置");
+    });
+  }
+})();
+</script>
+</body>
+</html>

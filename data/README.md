@@ -9,10 +9,28 @@
 | `tracks.csv` | 赛道库，记录候选/在跑/放弃的赛道及打分 | `scripts/track_score.py` 或手工 |
 | `videos.csv` | **核心表**，每条发布过的视频一行 | `scripts/new_video.py` 或手工 |
 | `notes.csv` | 图文笔记台账，每条图文一行（点击率/收藏率/搜索占比） | 手工 |
+| `episodes.csv` | 剧集台账，麻薯×大吉 25 集的选题、钩子、公式、状态 | 手工 |
 | `metrics.csv` | 同一条视频在不同时点的数据快照 | 手工回填 |
 | `raw/` | 平台导出的原始文件（不入库） | 手工放置 |
 
 字段完整定义见 [`../docs/01-数据规范.md`](../docs/01-数据规范.md)。
+
+### episodes.csv 字段
+
+剧集台账只有 13 列，用来回答一个问题：**这 25 集排到哪一步了。**
+
+| 字段 | 说明 |
+|---|---|
+| `ep_id` / `ep_no` | `E01`–`E25`，与 `docs/13` 的集号一致 |
+| `title` / `one_line` | 集名与一句话剧情 |
+| `hook_type` | 悬念式 / 反差式 / 日常式 / 情绪式（开头 3 秒的钩子类型） |
+| `formula` | 套的是六条剧情公式中的哪一条 |
+| `duration_sec` / `shots` | 目标时长与镜头数，用于估成本 |
+| `status` | `pool` 选题池 → `script_ready` 有分镜 → `shot` 已出镜头 → `published` 已发布 → `dropped` 放弃 |
+| `video_id` | 发布后填 `videos.csv` 的主键，两表靠它关联 |
+| `publish_date` / `gmv` | 发布日与直接带来的成交额（视频本身不带货就填 0） |
+
+**发布一条就回填一行**，`status` 从 `script_ready` 改成 `published` 并补上 `video_id`。这样"拍了多少、废了多少、哪条公式最能涨粉"三件事都能直接数出来。
 
 ## 示例数据说明
 

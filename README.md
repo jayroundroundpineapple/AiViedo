@@ -92,6 +92,7 @@ AiViedo/
 │   ├── tracks.csv             赛道库（候选 / 在跑 / 已放弃）
 │   ├── videos.csv             视频发布台账（核心表）
 │   ├── notes.csv              图文发布台账
+│   ├── episodes.csv           剧集台账（麻薯×大吉 25 集，含状态流转）
 │   ├── metrics.csv            数据快照（同一视频的多时点记录）
 │   └── raw/                   原始导出（不入库）
 ├── prompts/
@@ -107,7 +108,8 @@ AiViedo/
 │   ├── new_video.py           交互式登记一条视频
 │   └── report.py              台账统计与诊断
 └── knowledge/
-    └── ai-short-video-guide.html   可视化版方法论（手机可直接看）
+    ├── ai-short-video-guide.html   可视化版方法论（手机可直接看）
+    └── character-card.html         麻薯×大吉 角色卡（复制描述串 / 分镜 / 一致性清单）
 ```
 
 ---
@@ -197,7 +199,7 @@ flowchart LR
 - [x] 路线汇总与决策规则（`docs/08`）：变现权限表 + 阶段推进 + 6 周决策规则
 - [x] 视频执行方案（`docs/09`）+ 双线并行与商单路径（`docs/10`）：真实报价表、三种视频的商单命运、7 小时周排期
 - [x] 启动执行手册（`docs/11`）：方向三选一、角色卡模板、四层选品、30 天排期、20 个标题
-- [x] 角色设定与前 5 集脚本（`docs/13`）：麻薯×大吉、关系引擎、五集完整分镜、20 集选题池
+- [x] 角色设定与前 5 集脚本（`docs/13`）+ 手机版角色卡（`knowledge/character-card.html`）+ 剧集台账（`data/episodes.csv`，25 集含状态流转）
 - [ ] 商单报价计算器（近 30 天互动中位数 × CPE × 内容系数）
 - [ ] 图文数据的统计脚本（点击率 / 收藏率 / 搜索占比诊断）
 - [ ] 海外接单 SOP（Fiverr Gig 文案、作品集清单、改稿边界）
